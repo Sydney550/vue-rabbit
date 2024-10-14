@@ -1,7 +1,7 @@
 <script setup>
-import {getDetail} from '@/apis/detail'
-import {ref, onMounted} from 'vue'
-import {useRoute} from 'vue-router'
+import { getDetail } from '@/apis/detail'
+import { ref, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
 import DetailHot from './components/DetailHot.vue'
 import ImageView from '@/components/ImageView/index.vue'
 const goods = ref([])
@@ -10,7 +10,7 @@ const getGoods = async () => {
   const res = await getDetail(route.params.id)
   goods.value = res.result
 }
-onMounted(()=> getGoods())
+onMounted(() => getGoods())
 </script>
 
 <template>
@@ -19,9 +19,11 @@ onMounted(()=> getGoods())
       <div class="bread-container">
         <el-breadcrumb separator=">">
           <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-          <el-breadcrumb-item :to="{ path: `/category/${goods.categories[1].id}` }">{{ goods.categories[1].name}}
+          <el-breadcrumb-item :to="{ path: `/category/${goods.categories[1].id}` }"
+            >{{ goods.categories[1].name }}
           </el-breadcrumb-item>
-          <el-breadcrumb-item :to="{ path: `/category/sub/${goods.categories[0].id}` }">{{ goods.categories[0].name}}
+          <el-breadcrumb-item :to="{ path: `/category/sub/${goods.categories[0].id}` }"
+            >{{ goods.categories[0].name }}
           </el-breadcrumb-item>
           <el-breadcrumb-item>{{ goods.name }}</el-breadcrumb-item>
         </el-breadcrumb>
@@ -32,17 +34,17 @@ onMounted(()=> getGoods())
           <div class="goods-info">
             <div class="media">
               <!-- 图片预览区 -->
-              <ImageView />
+              <ImageView :image-list="goods.mainPictures" />
               <!-- 统计数量 -->
               <ul class="goods-sales">
                 <li>
                   <p>销量人气</p>
-                  <p> {{ goods.salesCount}}+ </p>
+                  <p>{{ goods.salesCount }}+</p>
                   <p><i class="iconfont icon-task-filling"></i>销量人气</p>
                 </li>
                 <li>
                   <p>商品评价</p>
-                  <p>{{ goods.commentCount}}+</p>
+                  <p>{{ goods.commentCount }}+</p>
                   <p><i class="iconfont icon-comment-filling"></i>查看评价</p>
                 </li>
                 <li>
@@ -59,8 +61,8 @@ onMounted(()=> getGoods())
             </div>
             <div class="spec">
               <!-- 商品信息区 -->
-              <p class="g-name"> {{ goods.name }} </p>
-              <p class="g-desc">{{ goods.desc }} </p>
+              <p class="g-name">{{ goods.name }}</p>
+              <p class="g-desc">{{ goods.desc }}</p>
               <p class="g-price">
                 <span>{{ goods.oldPrice }}</span>
                 <span> {{ goods.price }}</span>
@@ -86,11 +88,8 @@ onMounted(()=> getGoods())
 
               <!-- 按钮组件 -->
               <div>
-                <el-button size="large" class="btn">
-                  加入购物车
-                </el-button>
+                <el-button size="large" class="btn"> 加入购物车 </el-button>
               </div>
-
             </div>
           </div>
           <div class="goods-footer">
@@ -109,14 +108,14 @@ onMounted(()=> getGoods())
                     </li>
                   </ul>
                   <!-- 图片 -->
-                  <img v-for="img in goods.details.pictures" :src="img" :key="img" alt="">
+                  <img v-for="img in goods.details.pictures" :src="img" :key="img" alt="" />
                 </div>
               </div>
             </div>
             <!-- 24热榜+专题推荐 -->
             <div class="goods-aside">
               <!-- 24小时 -->
-              <DetailHot :hot-type="1"/>
+              <DetailHot :hot-type="1" />
               <!-- 周 -->
               <DetailHot :hot-type="2" />
             </div>
@@ -127,8 +126,7 @@ onMounted(()=> getGoods())
   </div>
 </template>
 
-
-<style scoped lang='scss'>
+<style scoped lang="scss">
 .xtx-goods-page {
   .goods-info {
     min-height: 600px;
@@ -198,7 +196,7 @@ onMounted(()=> getGoods())
 
     span {
       &::before {
-        content: "¥";
+        content: '¥';
         font-size: 14px;
       }
 
@@ -240,7 +238,7 @@ onMounted(()=> getGoods())
             margin-right: 10px;
 
             &::before {
-              content: "•";
+              content: '•';
               color: $xtxColor;
               margin-right: 2px;
             }
@@ -265,13 +263,13 @@ onMounted(()=> getGoods())
       flex: 1;
       position: relative;
 
-      ~li::after {
+      ~ li::after {
         position: absolute;
         top: 10px;
         left: 0;
         height: 60px;
         border-left: 1px solid #e4e4e4;
-        content: "";
+        content: '';
       }
 
       p {
@@ -319,7 +317,7 @@ onMounted(()=> getGoods())
       font-size: 18px;
       position: relative;
 
-      >span {
+      > span {
         color: $priceColor;
         font-size: 16px;
         margin-left: 10px;
@@ -353,14 +351,13 @@ onMounted(()=> getGoods())
     }
   }
 
-  >img {
+  > img {
     width: 100%;
   }
 }
 
 .btn {
   margin-top: 20px;
-
 }
 
 .bread-container {
