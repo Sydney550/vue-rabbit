@@ -1,13 +1,13 @@
 <script setup>
 import { ref, watch } from 'vue'
-import { useMouseInElement } from '@vueuse/core';
+import { useMouseInElement } from '@vueuse/core'
 // 图片列表
 const imageList = [
-  "https://yanxuan-item.nosdn.127.net/d917c92e663c5ed0bb577c7ded73e4ec.png",
-  "https://yanxuan-item.nosdn.127.net/e801b9572f0b0c02a52952b01adab967.jpg",
-  "https://yanxuan-item.nosdn.127.net/b52c447ad472d51adbdde1a83f550ac2.jpg",
-  "https://yanxuan-item.nosdn.127.net/f93243224dc37674dfca5874fe089c60.jpg",
-  "https://yanxuan-item.nosdn.127.net/f881cfe7de9a576aaeea6ee0d1d24823.jpg"
+  'https://yanxuan-item.nosdn.127.net/d917c92e663c5ed0bb577c7ded73e4ec.png',
+  'https://yanxuan-item.nosdn.127.net/e801b9572f0b0c02a52952b01adab967.jpg',
+  'https://yanxuan-item.nosdn.127.net/b52c447ad472d51adbdde1a83f550ac2.jpg',
+  'https://yanxuan-item.nosdn.127.net/f93243224dc37674dfca5874fe089c60.jpg',
+  'https://yanxuan-item.nosdn.127.net/f881cfe7de9a576aaeea6ee0d1d24823.jpg'
 ]
 
 // 小图切换大图显示
@@ -23,29 +23,38 @@ const { elementX, elementY, isOutside } = useMouseInElement(target)
 // 控制滑块跟随鼠标移动（监听elementX和elementY的变化，设置left/top随之变化）
 const left = ref(0)
 const top = ref(0)
+// 大图坐标
+const positionX = ref(0)
+const positionY = ref(0)
 watch([elementX, elementY], () => {
+  // 如果鼠标不在盒子内，直接不执行后面的逻辑
+  if (isOutside.value) return
+
+  // 控制滑块在有效范围内移动
   if (elementX.value > 100 && elementX.value < 300) {
     left.value = elementX.value - 100
   }
   if (elementY.value > 100 && elementY.value < 300) {
     top.value = elementY.value - 100
   }
-  if ( elementX.value < 100) {
+  if (elementX.value < 100) {
     left.value = 0
   }
-  if ( elementX.value > 300) {
+  if (elementX.value > 300) {
     left.value = 200
   }
-    if ( elementY.value < 100) {
-        top.value = 0
-    }
-    if ( elementY.value > 300) {
-        top.value = 200
-    }
+  if (elementY.value < 100) {
+    top.value = 0
+  }
+  if (elementY.value > 300) {
+    top.value = 200
+  }
+
+  // 放大镜效果
+  positionX.value = -left.value * 2
+  positionY.value = -top.value * 2
 })
-
 </script>
-
 
 <template>
   <div class="goods-image">
@@ -53,22 +62,26 @@ watch([elementX, elementY], () => {
     <div class="middle" ref="target">
       <img :src="imageList[activeIndex]" alt="" />
       <!-- 蒙层小滑块 -->
-      <div class="layer" :style="{ left: `${left}px`, top: `${top}px` }"></div>
+      <div class="layer" v-show="!isOutside" :style="{ left: `${left}px`, top: `${top}px` }"></div>
     </div>
     <!-- 小图列表 -->
     <ul class="small">
-      <li v-for="(img, i) in imageList" :key="i" @mouseenter="enterhandler(i)" :class="{active:i === activeIndex}">
+      <li v-for="(img, i) in imageList" :key="i" @mouseenter="enterhandler(i)" :class="{ active: i === activeIndex }">
         <img :src="img" alt="" />
       </li>
     </ul>
     <!-- 放大镜大图 -->
-    <div class="large" :style="[
-      {
-        backgroundImage: `url(${imageList[0]})`,
-        backgroundPositionX: `0px`,
-        backgroundPositionY: `0px`,
-      },
-    ]" v-show="false"></div>
+    <div
+      class="large"
+      :style="[
+        {
+          backgroundImage: `url(${imageList[activeIndex]})`,
+          backgroundPositionX: `${positionX}px`,
+          backgroundPositionY: `${positionY}px`
+        }
+      ]"
+      v-show="!isOutside"
+    ></div>
   </div>
 </template>
 
