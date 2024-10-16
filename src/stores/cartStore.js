@@ -24,12 +24,19 @@ export const useCartStore = defineStore('cart', () => {
   const allCount = computed(() => cartList.value.reduce((prev, item) => prev + item.count, 0))
   const allPrice = computed(() => cartList.value.reduce((prev, item) => prev + item.count * item.price, 0))
 
+  // 单选功能
+  const singleCheck = (skuId, selected) => {
+    const item = cartList.value.find((item) => item.skuId === skuId)
+    item.selected = selected
+  }
+
   return {
     cartList,
     allCount,
     allPrice,
     addCart,
-    delCart
+    delCart,
+    singleCheck
   }
 }, {
   persist: true
